@@ -22,9 +22,19 @@ class MainActivity : AppCompatActivity() {
             val year = yeartext.text.toString().toLong()
             val id = helper.addSong(artist, title, year)
             idtext.setText("$id")
+        }
+        searchbut.setOnClickListener{
+            val Id = idtext.text.toString()
+            val SongObject = helper.findSong(Id)
 
-            // Get the ID of the song
-            // set the id field to the ID returned
+            val Title = SongObject?.title
+            val Artist = SongObject?.artist
+            val Year = SongObject?.year
+
+            titletext.setText(Title)
+            artisttext.setText(Artist)
+            yeartext.setText("$Year")
+
         }
 
     }

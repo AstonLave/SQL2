@@ -3,12 +3,14 @@ package uk.ac.solent.sql
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import uk.ac.solent.sql.R.attr.displayOptions
+import uk.ac.solent.sql.R.attr.title
 
 
 class MyHelper(ctx:Context) : SQLiteOpenHelper(ctx, "MusicDB", null, 1){
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS Hits(Id INT PRIMARY KEY, Title VARCHAR(255),Artist VARCHAR(255), Year INT)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS Hits(Id INTEGER PRIMARY KEY, Title VARCHAR(255),Artist VARCHAR(255), Year INT)")
     }
     override fun onUpgrade(db:SQLiteDatabase, oldVersion:Int, newVersion:Int) {
         db.execSQL ("DROP TABLE IF EXISTS Hits")
@@ -23,14 +25,29 @@ class MyHelper(ctx:Context) : SQLiteOpenHelper(ctx, "MusicDB", null, 1){
         val id = stmt.executeInsert()
         return id
     }
-    fun findSong(id: Long) : Song? {
+    class Song(id: String, t: String, a: String, y: Long)
+    {
+        val title: String
+        val artist: String
+        val year: Long
+
+        init {
+            title = t
+            artist = a
+            year = y
+        }
+
+
+    }
+    fun findSong(id: String) : Song? {
         val db = getReadableDatabase()
         val cursor = db.rawQuery ("SELECT * FROM Hits WHERE Id=?", arrayOf<String>("$id") )
         if (cursor.moveToFirst()){
-            val S = Song(cursor.getString(cursor.getColumnIndex(columnName:"ID"))
-
+            val s = Song(cursor.getString(cursor.getColumnIndex("Id")), cursor.getString(cursor.getColumnIndex("Title")),cursor.getString(cursor.getColumnIndex("Artist")),cursor.getLong(cursor.getColumnIndex("Year")))
+            cursor.close()
+            return s
         }
         cursor.close()
-        return people
+        return null
     }
 }
