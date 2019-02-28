@@ -43,7 +43,8 @@ class MyHelper(ctx:Context) : SQLiteOpenHelper(ctx, "MusicDB", null, 1){
         val db = getReadableDatabase()
         val cursor = db.rawQuery ("SELECT * FROM Hits WHERE Id=?", arrayOf<String>("$id") )
         if (cursor.moveToFirst()){
-            val s = Song(cursor.getString(cursor.getColumnIndex("Id")), cursor.getString(cursor.getColumnIndex("Title")),cursor.getString(cursor.getColumnIndex("Artist")),cursor.getLong(cursor.getColumnIndex("Year")))
+            val s = Song(cursor.getString(cursor.getColumnIndex("Id")), cursor.getString(cursor.getColumnIndex("Title")),
+                    cursor.getString(cursor.getColumnIndex("Artist")),cursor.getLong(cursor.getColumnIndex("Year")))
             cursor.close()
             return s
         }
